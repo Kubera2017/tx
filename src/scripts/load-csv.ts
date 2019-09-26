@@ -58,6 +58,8 @@ const load = async () => {
     await Neo4jDriver.Instance.runQuery(query, {});
     query = `CREATE CONSTRAINT ON (n:Entity) ASSERT n.id IS UNIQUE`;
     await Neo4jDriver.Instance.runQuery(query, {});
+    query = `CREATE CONSTRAINT ON (n:BankAccount) ASSERT n.id IS UNIQUE`;
+    await Neo4jDriver.Instance.runQuery(query, {});
     await Neo4jDriver.Instance.commitTransaction();
     await Neo4jDriver.Instance.closeSession();
 
@@ -66,11 +68,16 @@ const load = async () => {
     .pipe(csv.parse({ headers: true }));
 
     let i = 0;
-    // let j = 0;
+    let j = 1;
+    const counter = 1000;
     const limit = 10;
     for await (const row of readStream) {
         i++;
-        if (i > limit) break;
+        // if (i > limit) break;
+        if (i > j * counter) {
+            console.log(i);
+            j++;
+        }
         await Neo4jDriver.Instance.openTransaction();
         const entry = <CsvRow> row;
 
@@ -79,8 +86,14 @@ const load = async () => {
         const node2 = getNode(entry.n);
 
         const createOrSkip = async (n: Node): Promise<void> => {
-            let q =
-            `MATCH (n) WHERE (n:Entity OR n:BankAccount) AND n.id = $id ` +
+            let q = "";
+            if (n.labels.find(str => str === "Entity"))
+            q =
+            `MATCH (n) WHERE n:Entity AND n.id = $id ` +
+            `RETURN n`;
+            else
+            q =
+            `MATCH (n) WHERE n:BankAccount AND n.id = $id ` +
             `RETURN n`;
             const result = await Neo4jDriver.Instance.runQuery(q, n);
             if (!result.records.length) {
@@ -91,7 +104,6 @@ const load = async () => {
 
                 for (const key in props) {
                     if (props.hasOwnProperty(key)) {
-                        console.log(key);
                         q +=
                         `SET n.${key} = "${n.properties[key]}" `;
                     }
