@@ -42,9 +42,9 @@ export class Neo4jDriver {
     public async openSession(type: TransactionTypes): Promise<void> {
         let session: neo4j.Session;
         if (type === TransactionTypes.READ) {
-            session = await this.driver.session("READ");
+            session = this.driver.session("READ");
         } else {
-            session = await this.driver.session("WRITE");
+            session = this.driver.session("WRITE");
         }
         this.localSession = session;
     }

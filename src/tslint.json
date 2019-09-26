@@ -14,7 +14,11 @@
         "object-literal-shorthand": false,
         "array-type": false,
         "interface-name": false,
-        "prefer-for-of": false
+        "prefer-for-of": false,
+        "curly": false,
+        "variable-name": false,
+        "one-variable-per-declaration": false,
+        "arrow-parens": false
     },
     "rulesDirectory": [],
     "linterOptions": {
