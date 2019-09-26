@@ -1,0 +1,19 @@
+{
+  "name": "tx",
+  "version": "1.0.0",
+  "scripts": {
+    "load-csv": "node ./build/scripts/load-csv.js",
+    "build": "tsc -p src"
+  },
+  "author": "Alex Kumundzhiev",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "fast-csv": "^3.0.1",
+    "neo4j-driver": "^1.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.12",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.3"
+  }
+}
