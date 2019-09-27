@@ -1,0 +1,42 @@
+CREATE CONSTRAINT ON (n:BankAccountBank) ASSERT n.name IS UNIQUE
+
+MATCH (n:BankAccount) 
+WHERE NOT n.bank IS NULL
+MERGE (bank:BankAccountBank {name: n.bank})
+WITH n, bank
+CREATE (n) -[:IN_BANK]-> (bank)
+
+MATCH (n:BankAccountBank) 
+WITH 
+n, 
+split(n.name, "") AS n_arr
+WITH 
+n,
+n_arr[0] AS l1,
+n_arr[1] AS l2,
+n_arr[2] AS l3,
+n_arr[3] AS l4,
+n_arr[4] AS l5,
+n_arr[5] AS l6
+where
+l1 = "B" AND 
+l2 = "A" AND 
+l3 = "N" AND
+l4 = "K" AND
+l5 = " " AND
+l6 = "O"
+WITH collect(n) AS a
+UNWIND a AS A
+UNWIND a AS B
+WITH A, B
+WHERE id(A) <> id(B)
+RETURN COUNT(*)
+WITH A, B,
+     apoc.text.sorensenDiceSimilarity(A.name,B.name) as sorensenDS
+WHERE sorensenDS > 0.8
+RETURN A.name, B.name ORDER BY A.name LIMIT 30
+
+
+MATCH (n:BankAccountBank)
+return n.name
+ORDER BY n.name ASC SKIP 1250 limit 100
