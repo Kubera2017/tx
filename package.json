@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "load-csv": "node ./build/scripts/load-csv.js",
+    "map": "node ./build/scripts/map.js",
+    "resolve-accounts": "node ./build/scripts/resolve-accounts.js",
     "build": "tsc -p src"
   },
   "author": "Alex Kumundzhiev",

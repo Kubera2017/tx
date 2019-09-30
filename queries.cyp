@@ -18,3 +18,13 @@ WITH n,
 where 
 return * limit 50
 CALL apoc.create.addLabels([ id(n) ], [ f, s, t ]) yield node
+
+WITH ["A", "B", "C"] AS letters
+UNWIND letters AS f
+WITH letters, f
+UNWIND letters AS s
+WITH letters, f, s
+UNWIND letters AS t
+MATCH (n:Entity)
+WHERE
+
