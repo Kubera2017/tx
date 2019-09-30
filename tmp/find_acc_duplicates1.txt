@@ -1,0 +1,5 @@
+MATCH (n:BankAccount)
+WITH n.account AS account, collect(n) AS twins
+WITH account, twins, size(twins) AS s
+WHERE s > 1
+RETURN account, s ORDER BY s DESC
